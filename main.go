@@ -17,12 +17,39 @@ func main() {
 	}
 	defer db.Close()
 
-	crt, err := db.Query("CREATE TABLE employee(id int AUTO INCREMENT, first_name VARCHAR(255))")
+	// crt, err := db.Query("CREATE TABLE employee(id int AUTO INCREMENT, first_name VARCHAR(255))")
+
+	// if err != nil {
+	// 	fmt.Println(err.Error())
+	// }
+
+	// defer crt.Close()
+
+	// inst, err := db.Query("INSERT INTO employee(first_name) VALUES ('Jason')")
+
+	// if err != nil {
+	// 	fmt.Println(err.Error())
+	// }
+
+	// defer inst.Close()
+
+	sel, err := db.Query("SELECT * FROM employee")
 
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 
-	defer crt.Close()
+	for sel.Next() {
+		var (
+			id   int
+			name string
+		)
+
+		err = sel.Scan(&id, &name)
+
+		fmt.Println(id, name)
+	}
+
+	defer sel.Close()
 
 }
