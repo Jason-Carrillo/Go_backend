@@ -10,6 +10,7 @@ import (
 func main() {
 	fmt.Println("Drivers:", sql.Drivers())
 
+	//CHOOSE DATABASE TO USE
 	db, err := sql.Open("mysql", "root:codeup@tcp(127.0.0.1:3306)/go_chal_db")
 
 	if err != nil {
@@ -17,6 +18,7 @@ func main() {
 	}
 	defer db.Close()
 
+	//CREATE TABLES
 	// crt, err := db.Query("CREATE TABLE employee(id int AUTO INCREMENT, first_name VARCHAR(255))")
 
 	// if err != nil {
@@ -25,6 +27,7 @@ func main() {
 
 	// defer crt.Close()
 
+	//INSERT USER
 	// inst, err := db.Query("INSERT INTO employee(first_name) VALUES ('Jason')")
 
 	// if err != nil {
@@ -33,6 +36,7 @@ func main() {
 
 	// defer inst.Close()
 
+	//SELECT FROM A TABLE
 	sel, err := db.Query("SELECT * FROM employee")
 
 	if err != nil {
@@ -46,6 +50,9 @@ func main() {
 		)
 
 		err = sel.Scan(&id, &name)
+		if err == nil {
+			fmt.Println("No users found")
+		}
 
 		fmt.Println(id, name)
 	}
