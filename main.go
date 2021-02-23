@@ -28,13 +28,22 @@ func main() {
 	// defer crt.Close()
 
 	//INSERT USER
-	// inst, err := db.Query("INSERT INTO employee(first_name) VALUES ('Jason')")
+	// inst, err := db.Query("INSERT INTO employee(first_name) VALUES ('Caleb')")
 
 	// if err != nil {
 	// 	fmt.Println(err.Error())
 	// }
 
 	// defer inst.Close()
+
+	//INSERT USER
+	inst, err := db.Query("DELETE FROM employee where id = '3'")
+
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	defer inst.Close()
 
 	//SELECT FROM A TABLE
 	sel, err := db.Query("SELECT * FROM employee")
@@ -50,7 +59,7 @@ func main() {
 		)
 
 		err = sel.Scan(&id, &name)
-		if err == nil {
+		if err != nil {
 			fmt.Println("No users found")
 		}
 
