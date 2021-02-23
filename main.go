@@ -17,13 +17,12 @@ func main() {
 	}
 	defer db.Close()
 
-	stmt, err := db.Query("DROP TABLE employee")
+	crt, err := db.Query("CREATE TABLE employee(id int AUTO INCREMENT, first_name VARCHAR(255))")
+
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 
-	defer stmt.Close()
-
-	fmt.Println("Done")
+	defer crt.Close()
 
 }
