@@ -84,7 +84,7 @@ func show(w http.ResponseWriter, r *http.Request) {
 }
 
 func New(w http.ResponseWriter, r *http.Request) {
-    temp.ExecuteTemplate(w, "New", nil)
+	temp.ExecuteTemplate(w, "New", nil)
 }
 
 func Edit(w http.ResponseWriter, r *http.Request) {
@@ -95,8 +95,19 @@ func Edit(w http.ResponseWriter, r *http.Request) {
 		panic(err.Error())
 	}
 	emp := employee{}
-	for selDB.Next(){
-		var 
+	for selDB.Next() {
+		var employeeID int
+		var name string
+		var dateCreated string
+		var dateUpdated string
+		err = selDB.Scan(&employeeID, &name, &dateCreated, &dateUpdated)
+		if err != nil {
+			panic(err.Error())
+		}
+		emp.employeeID = employeeID
+		emp.name = name
+		emp.dateCreated = dateCreated
+		emp.dateUpdated = dateUpdated
 	}
 }
 
