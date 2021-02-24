@@ -109,6 +109,8 @@ func Edit(w http.ResponseWriter, r *http.Request) {
 		emp.dateCreated = dateCreated
 		emp.dateUpdated = dateUpdated
 	}
+	temp.ExecuteTemplate(w, "Edit", emp)
+	defer db.Close()
 }
 
 func main() {
