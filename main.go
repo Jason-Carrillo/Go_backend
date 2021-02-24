@@ -53,6 +53,8 @@ func index(w http.ResponseWriter, r *http.Request) {
 		emp.dateUpdated = dateUpdated
 	}
 	temp.ExecuteTemplate(w, "Index", res)
+
+	defer db.Close()
 }
 
 func main() {
