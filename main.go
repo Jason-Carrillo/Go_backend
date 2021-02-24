@@ -9,7 +9,7 @@ import (
 )
 
 type employee struct {
-	employeeId  int
+	employeeID  int
 	name        string
 	dateCreated string
 	dateUpdated string
@@ -38,22 +38,48 @@ func index(w http.ResponseWriter, r *http.Request) {
 	emp := employee{}
 	res := []employee{}
 	for selDB.Next() {
-		var employeeId int
+		var employeeID int
 		var name string
 		var dateCreated string
 		var dateUpdated string
 
-		err = selDB.Scan(&employeeId, &name, &dateCreated, &dateUpdated)
+		err = selDB.Scan(&employeeID, &name, &dateCreated, &dateUpdated)
 		if err != nil {
 			panic(err.Error())
 		}
-		emp.employeeId = employeeId
+		emp.employeeID = employeeID
 		emp.name = name
 		emp.dateCreated = dateCreated
 		emp.dateUpdated = dateUpdated
 	}
 	temp.ExecuteTemplate(w, "Index", res)
 
+	defer db.Close()
+}
+
+func show(w http.ResponseWriter, r *http.Request) {
+	db := dbConn()
+	nID := r.URL.Query().Get("employeeID")
+	selDB, err := db.Query("SELECT * FROM Employee where id=?", nID)
+	if err != nil {
+		panic(err.Error())
+	}
+	emp := employee{}
+	for selDB.Next() {
+		var employeeID int
+		var name string
+		var dateCreated string
+		var dateUpdated string
+		err = selDB.Scan(&employeeID, &name, &dateCreated, &dateUpdated)
+		if err != nil {
+			panic(err.Error())
+		}
+		emp.employeeID = employeeID
+		emp.name = name
+		emp.dateCreated = dateCreated
+		emp.dateUpdated = dateUpdated
+	}
+	temp.ExecuteTemplate(w, "show", emp)
 	defer db.Close()
 }
 
