@@ -118,7 +118,7 @@ func Insert(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		name := r.FormValue("name")
 		dateCreated := r.FormValue("date_created")
-		dateUpdated := r.FormValue("date_updated")
+		insForm, err := db.Prepare("INSERT INTO employee(name, date_created) VALUES (?, ?)")
 	}
 }
 
