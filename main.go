@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"html/template"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -13,19 +14,23 @@ func main() {
 		firstName string
 	}
 
-	db, err := sql.Open("mysql", "root:codeup@tcp(127.0.0.1:3306)/go_chal_db")
-
-	if err != nil {
-		fmt.Println(err)
+	func dbConn() (db *sql.db) {
+		dbDriver := "mysql"
+		dbUser := "root"
+		dbpass := "codeup"
+		dbName := "go_chal_db"
+		db, err := sql.Open(dbDriver, dbUser+":"+dbPass+"@/"+dbname )
+		if err != nil {
+			panic(err.Error())
+		}
+		return db
 	}
-	defer db.Close()
 
-	crt, err := db.Query("CREATE TABLE IF NOT EXISTS employee(employee_id int primary key auto_increment, name VARCHAR(255)), date_joined TIMESTAMP NOT NULL, date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 
-	if err != nil {
-		fmt.Println("CREATE TABLE ERROR:", err.Error())
+	var temp = template.Must(template.ParseGlob("form/*"))
+
+	func index(w http.ResponseWriter, r *http.Request) {
+		db := dbConn()
 	}
-
-	defer crt.Close()
 
 }
