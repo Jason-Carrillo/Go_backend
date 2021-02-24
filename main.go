@@ -9,13 +9,13 @@ import (
 )
 
 type employee struct {
-	employee_id int
+	employeeId  int
 	name        string
 	dateCreated string
 	dateUpdated string
 }
 
-func dbConn() (db *sql.db) {
+func dbConn() (db *sql.DB) {
 	dbDriver := "mysql"
 	dbUser := "root"
 	dbpass := "codeup"
@@ -38,20 +38,21 @@ func index(w http.ResponseWriter, r *http.Request) {
 	emp := employee{}
 	res := []employee{}
 	for selDB.Next() {
-		var employee_id int
+		var employeeId int
 		var name string
 		var dateCreated string
 		var dateUpdated string
 
-		err = selDB.Scan(&employee_id, &name, &dateCreated, &dateUpdated)
+		err = selDB.Scan(&employeeId, &name, &dateCreated, &dateUpdated)
 		if err != nil {
 			panic(err.Error())
 		}
-		emp.employee_id = employee_id
+		emp.employeeId = employeeId
 		emp.name = name
 		emp.dateCreated = dateCreated
 		emp.dateUpdated = dateUpdated
 	}
+	temp.ExecuteTemplate(w, "Index", res)
 }
 
 func main() {
