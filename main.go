@@ -83,6 +83,12 @@ func show(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 }
 
+func new(w http.ResponseWriter, r *http.Request) {
+	db := dbConn()
+	nID := r.URL.Query().Get("employeeID")
+	selDB, err := db.Query("SELECT * FROM employee WHERE id=?", nID)
+}
+
 func main() {
 
 }
