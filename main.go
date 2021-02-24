@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"html/template"
+	"log"
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -119,7 +120,14 @@ func Insert(w http.ResponseWriter, r *http.Request) {
 		name := r.FormValue("name")
 		dateCreated := r.FormValue("date_created")
 		insForm, err := db.Prepare("INSERT INTO employee(name, date_created) VALUES (?, ?)")
+		if err != nil {
+			panic(err.Error())
+		}
+		insForm.Exec(name, dateCreated)
+		log.Println("INSERT: Name: " + name + " | dateCreated: " + dateCreated)
 	}
+	defer db.Close()
+	http.Redirect(w, r, "/", 301)
 }
 
 func main() {
