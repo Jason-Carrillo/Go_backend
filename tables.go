@@ -29,7 +29,7 @@ func tables() {
 
 	//CREATE TABLES
 
-	crt, err := db.Query("CREATE TABLE IF NOT EXISTS employee(employee_id int primary key auto_increment, first_name VARCHAR(255))")
+	crt, err := db.Query("CREATE TABLE IF NOT EXISTS employee(employee_id int primary key auto_increment, name VARCHAR(255), date_updated TIMESTAMP NOT NULL, date_joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP)")
 
 	if err != nil {
 		fmt.Println("CREATE TABLE ERROR:", err.Error())
