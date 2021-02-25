@@ -81,7 +81,7 @@ func Show(w http.ResponseWriter, r *http.Request) {
 		emp.dateCreated = dateCreated
 		emp.dateUpdated = dateUpdated
 	}
-	tmpl.ExecuteTemplate(w, "show", emp)
+	tmpl.ExecuteTemplate(w, "Show", emp)
 	defer db.Close()
 }
 
