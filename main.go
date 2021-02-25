@@ -160,5 +160,5 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-
+	log.Println("Server started on: http://localhost:8080")
 }
