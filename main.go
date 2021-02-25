@@ -61,7 +61,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 func show(w http.ResponseWriter, r *http.Request) {
 	db := dbConn()
 	nID := r.URL.Query().Get("employeeID")
-	selDB, err := db.Query("SELECT * FROM Employee where id=?", nID)
+	selDB, err := db.Query("SELECT * FROM Employee where employee_id=?", nID)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -146,6 +146,12 @@ func Update(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 	http.Redirect(w, r, "/", 301)
+}
+
+func Delete(w http.ResponseWriter, r *http.Request) {
+	db := dbConn()
+	emp := r.URL.Query().Get("employeeID")
+	delForm, err := db.Prepare("DELETE FROM employee WHERE employee_id=?")
 }
 
 func main() {
