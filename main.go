@@ -52,6 +52,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		emp.name = name
 		emp.dateCreated = dateCreated
 		emp.dateUpdated = dateUpdated
+		res = append(res, emp)
 	}
 	temp.ExecuteTemplate(w, "Index", res)
 
