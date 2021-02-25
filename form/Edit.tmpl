@@ -3,9 +3,9 @@
     {{ template "Menu" }} 
    <h2>Edit Name and City</h2>  
     <form method="POST" action="update">
-      <input type="hidden" name="uid" value="{{ .Id }}" />
+      <input type="hidden" name="uid" value="{{ .employeeId }}" />
       <label> Name </label><input type="text" name="name" value="{{ .Name }}"  /><br />
-      <label> City </label><input type="text" name="city" value="{{ .City }}"  /><br />
+      <label> Date_Joined </label><input type="text" name="Date_Joined" value="{{ .Date_Joined }}"  /><br />
       <input type="submit" value="Save user" />
     </form><br />    
   {{ template "Footer" }}
