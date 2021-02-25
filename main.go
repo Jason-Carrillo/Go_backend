@@ -118,13 +118,12 @@ func Insert(w http.ResponseWriter, r *http.Request) {
 	db := dbConn()
 	if r.Method == "POST" {
 		name := r.FormValue("name")
-		dateCreated := r.FormValue("date_created")
-		insForm, err := db.Prepare("INSERT INTO employee(name, date_created) VALUES (?, ?)")
+		insForm, err := db.Prepare("INSERT INTO employee(name) VALUES (?)")
 		if err != nil {
 			panic(err.Error())
 		}
-		insForm.Exec(name, dateCreated)
-		log.Println("INSERT: Name: " + name + " | dateCreated: " + dateCreated)
+		insForm.Exec(name)
+		log.Println("INSERT: Name: " + name)
 	}
 	defer db.Close()
 	http.Redirect(w, r, "/", 301)
