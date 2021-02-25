@@ -28,7 +28,7 @@ func dbConn() (db *sql.DB) {
 	return db
 }
 
-var temp = template.Must(template.ParseGlob("form/*"))
+var tmpl = template.Must(template.ParseGlob("form/*"))
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	db := dbConn()
@@ -54,7 +54,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		emp.dateUpdated = dateUpdated
 		res = append(res, emp)
 	}
-	temp.ExecuteTemplate(w, "Index", res)
+	tmpl.ExecuteTemplate(w, "Index", res)
 
 	defer db.Close()
 }
@@ -81,12 +81,12 @@ func Show(w http.ResponseWriter, r *http.Request) {
 		emp.dateCreated = dateCreated
 		emp.dateUpdated = dateUpdated
 	}
-	temp.ExecuteTemplate(w, "show", emp)
+	tmpl.ExecuteTemplate(w, "show", emp)
 	defer db.Close()
 }
 
 func New(w http.ResponseWriter, r *http.Request) {
-	temp.ExecuteTemplate(w, "New", nil)
+	tmpl.ExecuteTemplate(w, "New", nil)
 }
 
 func Edit(w http.ResponseWriter, r *http.Request) {
@@ -111,7 +111,7 @@ func Edit(w http.ResponseWriter, r *http.Request) {
 		emp.dateCreated = dateCreated
 		emp.dateUpdated = dateUpdated
 	}
-	temp.ExecuteTemplate(w, "Edit", emp)
+	tmpl.ExecuteTemplate(w, "Edit", emp)
 	defer db.Close()
 }
 
