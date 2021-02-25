@@ -91,7 +91,7 @@ func New(w http.ResponseWriter, r *http.Request) {
 func Edit(w http.ResponseWriter, r *http.Request) {
 	db := dbConn()
 	nID := r.URL.Query().Get("employeeID")
-	selDB, err := db.Query("SELECT * FROM employee WHERE id=?", nID)
+	selDB, err := db.Query("SELECT * FROM employee WHERE employee_id=?", nID)
 	if err != nil {
 		panic(err.Error())
 	}
