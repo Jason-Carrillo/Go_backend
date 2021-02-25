@@ -30,7 +30,7 @@ func dbConn() (db *sql.DB) {
 
 var temp = template.Must(template.ParseGlob("form/*"))
 
-func index(w http.ResponseWriter, r *http.Request) {
+func Index(w http.ResponseWriter, r *http.Request) {
 	db := dbConn()
 	selDB, err := db.Query("SELECT * FROM employee ORDER by id DESC")
 	if err != nil {
