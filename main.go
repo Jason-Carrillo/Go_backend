@@ -58,7 +58,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 }
 
-func show(w http.ResponseWriter, r *http.Request) {
+func Show(w http.ResponseWriter, r *http.Request) {
 	db := dbConn()
 	nID := r.URL.Query().Get("employeeID")
 	selDB, err := db.Query("SELECT * FROM Employee where employee_id=?", nID)
@@ -161,4 +161,12 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	log.Println("Server started on: http://localhost:8080")
+	http.HandleFunc("/", Index)
+	http.HandleFunc("/show", Show)
+	http.HandleFunc("/new", New)
+	http.HandleFunc("/edit", Edit)
+	http.HandleFunc("/insert", Insert)
+	http.HandleFunc("/update", Update)
+	http.HandleFunc("/delete", Delete)
+	http.ListenAndServe(":8000", nil)
 }
