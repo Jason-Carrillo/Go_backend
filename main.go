@@ -150,6 +150,13 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 	db := dbConn()
 	emp := r.URL.Query().Get("employeeID")
 	delForm, err := db.Prepare("DELETE FROM employee WHERE employee_id=?")
+	if err != nil {
+		panic(err.Error())
+	}
+	delForm.Exec(emp)
+	log.Println("DELETE")
+	defer db.Close()
+	http.Redirect(w, r, "/", 301)
 }
 
 func main() {
