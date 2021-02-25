@@ -34,7 +34,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	db := dbConn()
 	selDB, err := db.Query("SELECT * FROM employee ORDER by id DESC")
 	if err != nil {
-		panic("Index Error: " + err.Error())
+		panic(err.Error())
 	}
 	emp := employee{}
 	res := []employee{}
