@@ -6,16 +6,15 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type employee struct {
-	id          int       `db:"employee_id"`
-	name        string    `db:"name"`
-	dateCreated time.Time `db:"date_joined"`
-	dateUpdated time.Time `db:"date_updated"`
+	id          int    `db:"employee_id"`
+	name        string `db:"name"`
+	dateUpdated string `db:"date_updated"`
+	dateCreated string `db:"date_joined"`
 }
 
 func dbConn() (db *sql.DB) {
@@ -30,34 +29,35 @@ func dbConn() (db *sql.DB) {
 	return db
 }
 
+func ErrorCheck(err error) {
+	if err != nil {
+		panic(err.Error())
+	}
+}
+
 var tmpl = template.Must(template.ParseGlob("form/*"))
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	db := dbConn()
 	selDB, err := db.Query("SELECT * FROM employee")
-	if err != nil {
-		panic(err.Error())
-	}
+	ErrorCheck(err)
 	emp := employee{}
 	var res []employee
 	for selDB.Next() {
 		var id int
 		var name string
-		var dateUpdated time.Time
-		var dateJoined time.Time
+		var dateJoined string
+		var dateUpdated string
 
-		err = selDB.Scan(&id, &name, &dateUpdated, &dateJoined)
-		if err != nil {
-			panic(err.Error())
-		}
-		fmt.Println(err)
+		err = selDB.Scan(&id, &name, &dateJoined, &dateUpdated)
+		ErrorCheck(err)
 		emp.id = id
 		emp.name = name
-		emp.dateCreated = dateJoined
-		emp.dateUpdated = dateUpdated
-		fmt.Println(err)
-		fmt.Println(emp)
+		emp.dateCreated = "dateJoined"
+		emp.dateUpdated = "dateUpdated"
+
 		res = append(res, emp)
+		fmt.Println("res", res)
 	}
 	tmpl.ExecuteTemplate(w, "Index", res)
 
