@@ -1,30 +1,33 @@
 {{ define "Index" }}
-  {{ template "Header" }}
-    {{ template "Menu"  }}
-    <h2> Registered </h2>
-    <table border="1">
-      <thead>
-      <tr>
+{{ template "Header" }}
+{{ template "Menu"  }}
+<h2> All people</h2>
+<table border="1">
+    <thead>
+    <tr>
         <td>ID</td>
-        <td>Name</td>
-        <td>City</td>
+        <td>First Name</td>
+        <td>Last Name</td>
+        <td>Age</td>
         <td>View</td>
         <td>Edit</td>
         <td>Delete</td>
-      </tr>
-       </thead>
-       <tbody>
+    </tr>
+    </thead>
+    <tbody>
     {{ range . }}
-      <tr>
-        <td>{{ .Id }}</td>
-        <td> {{ .Name }} </td>
-        <td>{{ .City }} </td> 
-        <td><a href="/show?id={{ .Id }}">View</a></td>
-        <td><a href="/edit?id={{ .Id }}">Edit</a></td>
-        <td><a href="/delete?id={{ .Id }}">Delete</a><td>
-      </tr>
+    <tr>
+        <td>{{ .ID }}</td>
+        <td> {{ .FirstName }} </td>
+        <td>{{ .LastName }} </td>
+        <td>{{ .Age }}</td>
+        <td>{{ .DateUpdated }} </td>
+        <td><a href="/showPerson?id={{ .ID }}">View</a></td>
+        <td><a href="/editPerson?id={{ .ID }}">Edit</a></td>
+        <td><a href="/deletePerson?id={{ .ID }}">Delete</a><td>
+    </tr>
     {{ end }}
-       </tbody>
-    </table>
-  {{ template "Footer" }}
+    </tbody>
+</table>
+{{ template "Footer" }}
 {{ end }}
