@@ -5,15 +5,16 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type employee struct {
-	employeeID  int
-	name        string
-	dateCreated string
-	dateUpdated string
+	id          int       `db:"employee_id"`
+	name        string    `db:"name"`
+	dateCreated time.Time `db:"date_joined"`
+	dateUpdated time.Time `db:"date_updated"`
 }
 
 func dbConn() (db *sql.DB) {
@@ -39,16 +40,16 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	emp := employee{}
 	res := []employee{}
 	for selDB.Next() {
-		var employeeID int
+		var id int
 		var name string
-		var dateCreated string
-		var dateUpdated string
+		var dateCreated time.Time
+		var dateUpdated time.Time
 
-		err = selDB.Scan(&employeeID, &name, &dateCreated, &dateUpdated)
+		err = selDB.Scan(&id, &name, &dateCreated, &dateUpdated)
 		if err != nil {
 			panic(err.Error())
 		}
-		emp.employeeID = employeeID
+		emp.id = id
 		emp.name = name
 		emp.dateCreated = dateCreated
 		emp.dateUpdated = dateUpdated
@@ -59,115 +60,115 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 }
 
-func Show(w http.ResponseWriter, r *http.Request) {
-	db := dbConn()
-	nID := r.URL.Query().Get("employeeID")
-	selDB, err := db.Query("SELECT * FROM Employee where employee_id=?", nID)
-	if err != nil {
-		panic(err.Error())
-	}
-	emp := employee{}
-	for selDB.Next() {
-		var employeeID int
-		var name string
-		var dateCreated string
-		var dateUpdated string
-		err = selDB.Scan(&employeeID, &name, &dateCreated, &dateUpdated)
-		if err != nil {
-			panic(err.Error())
-		}
-		emp.employeeID = employeeID
-		emp.name = name
-		emp.dateCreated = dateCreated
-		emp.dateUpdated = dateUpdated
-	}
-	tmpl.ExecuteTemplate(w, "Show", emp)
-	defer db.Close()
-}
+// func Show(w http.ResponseWriter, r *http.Request) {
+// 	db := dbConn()
+// 	nID := r.URL.Query().Get("employeeID")
+// 	selDB, err := db.Query("SELECT * FROM Employee where employee_id=?", nID)
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+// 	emp := employee{}
+// 	for selDB.Next() {
+// 		var employeeID int
+// 		var name string
+// 		var dateCreated string
+// 		var dateUpdated string
+// 		err = selDB.Scan(&employeeID, &name, &dateCreated, &dateUpdated)
+// 		if err != nil {
+// 			panic(err.Error())
+// 		}
+// 		emp.employeeID = employeeID
+// 		emp.name = name
+// 		emp.dateCreated = dateCreated
+// 		emp.dateUpdated = dateUpdated
+// 	}
+// 	tmpl.ExecuteTemplate(w, "Show", emp)
+// 	defer db.Close()
+// }
 
-func New(w http.ResponseWriter, r *http.Request) {
-	tmpl.ExecuteTemplate(w, "New", nil)
-}
+// func New(w http.ResponseWriter, r *http.Request) {
+// 	tmpl.ExecuteTemplate(w, "New", nil)
+// }
 
-func Edit(w http.ResponseWriter, r *http.Request) {
-	db := dbConn()
-	nID := r.URL.Query().Get("employee_id")
-	selDB, err := db.Query("SELECT * FROM employee WHERE employee_id=?", nID)
-	if err != nil {
-		panic(err.Error())
-	}
-	emp := employee{}
-	for selDB.Next() {
-		var employeeID int
-		var name string
-		var dateCreated string
-		var dateUpdated string
-		err = selDB.Scan(&employeeID, &name, &dateCreated, &dateUpdated)
-		if err != nil {
-			panic(err.Error())
-		}
-		emp.employeeID = employeeID
-		emp.name = name
-		emp.dateCreated = dateCreated
-		emp.dateUpdated = dateUpdated
-	}
-	tmpl.ExecuteTemplate(w, "Edit", emp)
-	defer db.Close()
-}
+// func Edit(w http.ResponseWriter, r *http.Request) {
+// 	db := dbConn()
+// 	nID := r.URL.Query().Get("employee_id")
+// 	selDB, err := db.Query("SELECT * FROM employee WHERE employee_id=?", nID)
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+// 	emp := employee{}
+// 	for selDB.Next() {
+// 		var employeeID int
+// 		var name string
+// 		var dateCreated string
+// 		var dateUpdated string
+// 		err = selDB.Scan(&employeeID, &name, &dateCreated, &dateUpdated)
+// 		if err != nil {
+// 			panic(err.Error())
+// 		}
+// 		emp.employeeID = employeeID
+// 		emp.name = name
+// 		emp.dateCreated = dateCreated
+// 		emp.dateUpdated = dateUpdated
+// 	}
+// 	tmpl.ExecuteTemplate(w, "Edit", emp)
+// 	defer db.Close()
+// }
 
-func Insert(w http.ResponseWriter, r *http.Request) {
-	db := dbConn()
-	if r.Method == "POST" {
-		name := r.FormValue("name")
-		insForm, err := db.Prepare("INSERT INTO employee(name) VALUES (?)")
-		if err != nil {
-			panic(err.Error())
-		}
-		insForm.Exec(name)
-		log.Println("INSERT: Name: " + name)
-	}
-	defer db.Close()
-	http.Redirect(w, r, "/", 301)
-}
+// func Insert(w http.ResponseWriter, r *http.Request) {
+// 	db := dbConn()
+// 	if r.Method == "POST" {
+// 		name := r.FormValue("name")
+// 		insForm, err := db.Prepare("INSERT INTO employee(name) VALUES (?)")
+// 		if err != nil {
+// 			panic(err.Error())
+// 		}
+// 		insForm.Exec(name)
+// 		log.Println("INSERT: Name: " + name)
+// 	}
+// 	defer db.Close()
+// 	http.Redirect(w, r, "/", 301)
+// }
 
-func Update(w http.ResponseWriter, r *http.Request) {
-	db := dbConn()
-	if r.Method == "POST" {
-		name := r.FormValue("name")
-		employeeID := r.FormValue("uID")
-		insForm, err := db.Prepare("INSERT INTO employee(name) VALUES (?)")
-		if err != nil {
-			panic(err.Error())
-		}
+// func Update(w http.ResponseWriter, r *http.Request) {
+// 	db := dbConn()
+// 	if r.Method == "POST" {
+// 		name := r.FormValue("name")
+// 		employeeID := r.FormValue("uID")
+// 		insForm, err := db.Prepare("INSERT INTO employee(name) VALUES (?)")
+// 		if err != nil {
+// 			panic(err.Error())
+// 		}
 
-		insForm.Exec(name, employeeID)
-		log.Println("UPDATE: Name: " + name)
-	}
-	defer db.Close()
-	http.Redirect(w, r, "/", 301)
-}
+// 		insForm.Exec(name, employeeID)
+// 		log.Println("UPDATE: Name: " + name)
+// 	}
+// 	defer db.Close()
+// 	http.Redirect(w, r, "/", 301)
+// }
 
-func Delete(w http.ResponseWriter, r *http.Request) {
-	db := dbConn()
-	emp := r.URL.Query().Get("employeeID")
-	delForm, err := db.Prepare("DELETE FROM employee WHERE employee_id=?")
-	if err != nil {
-		panic(err.Error())
-	}
-	delForm.Exec(emp)
-	log.Println("DELETE")
-	defer db.Close()
-	http.Redirect(w, r, "/", 301)
-}
+// func Delete(w http.ResponseWriter, r *http.Request) {
+// 	db := dbConn()
+// 	emp := r.URL.Query().Get("employeeID")
+// 	delForm, err := db.Prepare("DELETE FROM employee WHERE employee_id=?")
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+// 	delForm.Exec(emp)
+// 	log.Println("DELETE")
+// 	defer db.Close()
+// 	http.Redirect(w, r, "/", 301)
+// }
 
 func main() {
 	log.Println("Server started on: http://localhost:8080")
 	http.HandleFunc("/", Index)
-	http.HandleFunc("/show", Show)
-	http.HandleFunc("/new", New)
-	http.HandleFunc("/edit", Edit)
-	http.HandleFunc("/insert", Insert)
-	http.HandleFunc("/update", Update)
-	http.HandleFunc("/delete", Delete)
+	// http.HandleFunc("/show", Show)
+	// http.HandleFunc("/new", New)
+	// http.HandleFunc("/edit", Edit)
+	// http.HandleFunc("/insert", Insert)
+	// http.HandleFunc("/update", Update)
+	// http.HandleFunc("/delete", Delete)
 	http.ListenAndServe(":8000", nil)
 }
