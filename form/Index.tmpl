@@ -7,7 +7,8 @@
       <tr>
         <td>ID</td>
         <td>Name</td>
-        <td>City</td>
+        <td>Date Joined</td>
+        <td>Date Updated</td>
         <td>View</td>
         <td>Edit</td>
         <td>Delete</td>
@@ -16,12 +17,13 @@
        <tbody>
     {{ range . }}
       <tr>
-        <td>{{ .Id }}</td>
-        <td> {{ .Name }} </td>
-        <td>{{ .City }} </td> 
-        <td><a href="/show?id={{ .Id }}">View</a></td>
-        <td><a href="/edit?id={{ .Id }}">Edit</a></td>
-        <td><a href="/delete?id={{ .Id }}">Delete</a><td>
+        <td>{{ .id }}</td>
+        <td> {{ .name }} </td>
+        <td>{{ .dateCreated }} </td> 
+        <td>{{ .dateUpdated }} </td> 
+        <td><a href="/show?id={{ .id }}">View</a></td>
+        <td><a href="/edit?id={{ .id }}">Edit</a></td>
+        <td><a href="/delete?id={{ .id }}">Delete</a><td>
       </tr>
     {{ end }}
        </tbody>

@@ -2,19 +2,19 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
-	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type employee struct {
-	id          int       `db:"employee_id"`
-	name        string    `db:"name"`
-	dateCreated time.Time `db:"date_joined"`
-	dateUpdated time.Time `db:"date_updated"`
+	id          int    `db:"employee_id"`
+	name        string `db:"name"`
+	dateCreated string `db:"date_joined"`
+	dateUpdated string `db:"date_updated"`
 }
 
 func dbConn() (db *sql.DB) {
@@ -26,6 +26,7 @@ func dbConn() (db *sql.DB) {
 	if err != nil {
 		panic(err.Error())
 	}
+	fmt.Println("TEST")
 	return db
 }
 
@@ -33,17 +34,17 @@ var tmpl = template.Must(template.ParseGlob("form/*"))
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	db := dbConn()
-	selDB, err := db.Query("SELECT * FROM employee ORDER by id DESC")
+	selDB, err := db.Query("SELECT * FROM employee")
 	if err != nil {
 		panic(err.Error())
 	}
 	emp := employee{}
-	res := []employee{}
+	var res []employee
 	for selDB.Next() {
 		var id int
 		var name string
-		var dateCreated time.Time
-		var dateUpdated time.Time
+		var dateCreated string
+		var dateUpdated string
 
 		err = selDB.Scan(&id, &name, &dateCreated, &dateUpdated)
 		if err != nil {
@@ -170,5 +171,5 @@ func main() {
 	// http.HandleFunc("/insert", Insert)
 	// http.HandleFunc("/update", Update)
 	// http.HandleFunc("/delete", Delete)
-	http.ListenAndServe(":8000", nil)
+	http.ListenAndServe(":8080", nil)
 }
